@@ -12,23 +12,24 @@
   background-color: #f5f7fa;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: start; /* changed from center */
   padding: 20px;
   margin: 0;
-  height: 100vh;
-  overflow: hidden;
+  height: auto; /* removed 100vh */
+  min-height: 100vh; /* ensures full screen */
+  overflow-y: auto; /* allows vertical scroll */
 }
+
 .card-wrapper {
   background: white;
   border-radius: 12px;
   box-shadow: 0 0 20px rgba(0,0,0,0.1);
-  padding: 30px 20px;
+  padding: 30px 20px 100px; /* ✅ extra bottom padding for Safari UI */
   width: 100%;
   max-width: 420px;
   box-sizing: border-box;
-  margin: 0 auto;
+  margin: 40px auto; /* adds space from top */
 }
-
 
 .card-header {
   background-color: #f6d1d2;
