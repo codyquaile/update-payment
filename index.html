@@ -3,77 +3,100 @@
 <head>
   <meta charset="UTF-8" />
   <title>Update Payment Info</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://jstest.authorize.net/v1/Accept.js" type="text/javascript" charset="utf-8"></script>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f5f7fa;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-    .card-wrapper {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.1);
-      padding: 30px;
-      width: 400px;
-    }
-    .card-header {
-      background-color: #f6d1d2;
-      color: #57585c;
-      padding: 20px;
-      border-radius: 10px;
-      text-align: center;
-      font-weight: bold;
-      font-size: 18px;
-      margin-bottom: 20px;
-    }
-    .form-field {
-      margin-bottom: 15px;
-    }
-    label {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 5px;
-      display: block;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-    }
-    .button-row {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 20px;
-    }
-    button {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    .cancel-btn {
-      background-color: #eee;
-      color: #333;
-    }
-    .save-btn {
-      background-color: #f6d1d2;
-      color: #57585c;
-    }
-    .flex-row {
-      display: flex;
-      gap: 16px;
-    }
-    .flex-field {
-      flex: 1;
-    }
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f5f7fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  margin: 0;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.card-wrapper {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  padding: 30px 20px;
+  width: 100%;
+  max-width: 420px;
+  box-sizing: border-box;
+}
+
+.card-header {
+  background-color: #f6d1d2;
+  color: #57585c;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.form-field {
+  margin-bottom: 15px;
+}
+
+label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  display: block;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  flex: 1;
+  min-width: 120px;
+}
+
+.cancel-btn {
+  background-color: #eee;
+  color: #333;
+}
+
+.save-btn {
+  background-color: #f6d1d2;
+  color: #57585c;
+}
+
+.flex-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.flex-field {
+  flex: 1 1 30%;
+  min-width: 80px;
+}
   </style>
 </head>
 <body>
@@ -82,7 +105,7 @@
     <div class="card-header">Update Payment Information</div>
     <form id="paymentForm" method="POST" action="/update-payment/save-payment.php">
       <div class="form-field">
-        <label for="fullName">Cardholder Name TEST</label>
+        <label for="fullName">Cardholder Name</label>
         <input type="text" id="fullName" required>
       </div>
       <div class="form-field">
