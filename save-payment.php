@@ -118,3 +118,13 @@ if (
 http_response_code($httpCode);
 header('Content-Type: application/json');
 echo json_encode($responseData);
+
+// Fallback if API call failed or no response
+if (!isset($responseData) || !is_array($responseData)) {
+    $responseData = ['error' => 'No valid response from payment gateway'];
+}
+
+// Final output
+http_response_code($httpCode ?? 500);
+header('Content-Type: application/json');
+echo json_encode($responseData);

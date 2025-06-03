@@ -205,71 +205,74 @@
   </div>
 
   <script>
-  document.getElementById("paymentForm").addEventListener("submit", function (e) {
-  e.preventDefault();
+    document.getElementById("paymentForm").addEventListener("submit", function (e) {
+      e.preventDefault();
 
-  const authData = {
-    clientKey: "2db4sy8RBUHK3nFW7y6aSK6Ae3WC9TQ6f4vWh3ynN78yrpMjjbQ52X5vz5MA3Zf9",
-    apiLoginID: "4625ksJLu"
-  };
+      const authData = {
+        clientKey: "2db4sy8RBUHK3nFW7y6aSK6Ae3WC9TQ6f4vWh3ynN78yrpMjjbQ52X5vz5MA3Zf9",
+        apiLoginID: "4625ksJLu"
+      };
 
-  const cardData = {
-    cardNumber: document.getElementById("cardNumber").value,
-    month: document.getElementById("expMonth").value,
-    year: document.getElementById("expYear").value,
-    cardCode: document.getElementById("cardCode").value
-  };
+      const cardData = {
+        cardNumber: document.getElementById("cardNumber").value,
+        month: document.getElementById("expMonth").value,
+        year: document.getElementById("expYear").value,
+        cardCode: document.getElementById("cardCode").value
+      };
 
-  const secureData = { authData, cardData };
+      const secureData = { authData, cardData };
 
-  Accept.dispatchData(secureData, function (response) {
-    if (response.messages.resultCode === "Error") {
-      alert("Error: " + response.messages.message[0].text);
-    } else {
-      const opaqueData = response.opaqueData;
-      document.getElementById("dataDescriptor").value = opaqueData.dataDescriptor;
-      document.getElementById("dataValue").value = opaqueData.dataValue;
+      Accept.dispatchData(secureData, function (response) {
+        if (response.messages.resultCode === "Error") {
+          alert("Error: " + response.messages.message[0].text);
+        } else {
+          const opaqueData = response.opaqueData;
+          document.getElementById("dataDescriptor").value = opaqueData.dataDescriptor;
+          document.getElementById("dataValue").value = opaqueData.dataValue;
 
-      // Clear sensitive input
-      document.getElementById("cardNumber").value = "";
-      document.getElementById("expMonth").value = "";
-      document.getElementById("expYear").value = "";
-      document.getElementById("cardCode").value = "";
+          // Clear sensitive input
+          document.getElementById("cardNumber").value = "";
+          document.getElementById("expMonth").value = "";
+          document.getElementById("expYear").value = "";
+          document.getElementById("cardCode").value = "";
 
-      fetch("/update-payment/save-payment.php", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    dataDescriptor: opaqueData.dataDescriptor,
-    dataValue: opaqueData.dataValue,
-    fullName: document.getElementById("fullName").value,
-    email: document.getElementById("email").value,
-    phone: document.getElementById("phone").value
-  })
-})
-  .then(async res => {
-    const text = await res.text(); // get raw response
-    let data;
-    try {
-      data = JSON.parse(text);
-    } catch (e) {
-      throw new Error("Invalid JSON from server: " + text);
-    }
+          fetch("/update-payment/save-payment.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              dataDescriptor: opaqueData.dataDescriptor,
+              dataValue: opaqueData.dataValue,
+              fullName: document.getElementById("fullName").value,
+              email: document.getElementById("email").value,
+              phone: document.getElementById("phone").value
+            })
+          })
+            .then(async res => {
+              const text = await res.text();
+              let data;
 
-    if (data.error) {
-      alert("Server Error: " + data.error);
-    } else {
-      alert("Payment information updated successfully!");
-      console.log("Server response:", data);
-    }
-  })
-  .catch(err => {
-    console.error("Request failed:", err);
-    alert("Unexpected error: " + err.message);
-  });
-    }
-  });
-});
+              try {
+                data = JSON.parse(text);
+              } catch (e) {
+                throw new Error("Invalid JSON returned from server: " + text);
+              }
+
+              if (data && data.error) {
+                alert("Server Error: " + data.error);
+              } else if (data && data.messages?.resultCode === "Ok") {
+                alert("Payment information updated successfully!");
+                console.log("Stored IDs:", data.stored);
+              } else {
+                alert("Unexpected response: " + text);
+              }
+            })
+            .catch(err => {
+              console.error("Request failed:", err);
+              alert("Unexpected error: " + err.message);
+            });
+        }
+      });
+    });
   </script>
 </body>
 
