@@ -75,23 +75,46 @@ $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
 
 // -------------------------------
-// ✅ DECODE + ADD PROFILE IDS
+// ✅ HANDLE RESPONSE
 // -------------------------------
 $responseData = json_decode($response, true);
 
+$profileId = $responseData['customerProfileId'] ?? null;
+$paymentProfileId = $responseData['customerPaymentProfileIdList'][0] ?? null;
+
+// If successful, add to response and trigger webhook
 if (
     isset($responseData['messages']['resultCode']) &&
     $responseData['messages']['resultCode'] === "Ok"
 ) {
     $responseData['stored'] = [
-        'profileId' => $responseData['customerProfileId'] ?? null,
-        'paymentProfileId' => $responseData['customerPaymentProfileIdList'][0] ?? null
+        'profileId' => $profileId,
+        'paymentProfileId' => $paymentProfileId
     ];
+
+    // ✅ Send to n8n webhook
+    $webhook_url = 'https://codyquaile.app.n8n.cloud/webhook-test/c61a1541-57cc-47ae-956d-95ef684408ea';
+
+    $webhook_payload = json_encode([
+        'fullName' => $fullName,
+        'email' => $email,
+        'phone' => $phone,
+        'profileId' => $profileId,
+        'paymentProfileId' => $paymentProfileId
+    ]);
+
+    $wh = curl_init($webhook_url);
+    curl_setopt_array($wh, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => $webhook_payload,
+        CURLOPT_HTTPHEADER => ['Content-Type: application/json']
+    ]);
+    curl_exec($wh);
+    curl_close($wh);
 }
 
-// -------------------------------
-// ✅ RETURN TO FRONTEND
-// -------------------------------
+// ✅ Return response to frontend
 http_response_code($httpCode);
 header('Content-Type: application/json');
 echo json_encode($responseData);
