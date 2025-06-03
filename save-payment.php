@@ -4,7 +4,7 @@ $endpoint = "https://apitest.authorize.net/xml/v1/request.api";
 
 // Your sandbox credentials
 $api_login_id = '4625ksJLu';
-$transaction_key = '5PdvByq676376M5b';
+$transaction_key = '6F5S66g2Nsd49w8A';
 
 $input = json_decode(file_get_contents('php://input'), true);
 
