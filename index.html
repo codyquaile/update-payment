@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>The Show Center - Payment Update</title>
-  <script type="text/javascript" src="https://js.authorize.net/v1/Accept.js"></script>
+  <script type="text/javascript" src="https://jstest.authorize.net/v1/Accept.js"></script>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -80,68 +80,59 @@
 <body>
   <div class="card-wrapper">
     <img src="Show-center-logo.png" alt="The Show Center Logo" style="width: 120px; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;">
-    <div class="card-header">
-      The Show Center - Payment Update
-    </div>
-    <form id="payment-form">
+    <div class="card-header">The Show Center - Payment Update</div>
+    <form id="paymentForm" method="POST" action="https://update-payment.onrender.com/save-payment.php">
       <div class="form-field">
-        <label for="cardholder-name">Cardholder name</label>
-        <input type="text" id="cardholder-name" required>
-      </div>
-      <div class="form-field">
-        <label for="card-number">Card number</label>
-        <input type="text" id="card-number" required>
+        <label for="cardNumber">Card Number</label>
+        <input type="text" id="cardNumber" name="cardNumber" required>
       </div>
       <div class="flex-row">
         <div class="form-field flex-field">
-          <label for="expiry">Expiry (MM/YY)</label>
-          <input type="text" id="expiry" placeholder="MM/YY" required>
+          <label for="expMonth">Exp. Month</label>
+          <input type="text" id="expMonth" name="expMonth" placeholder="MM" required>
         </div>
         <div class="form-field flex-field">
-          <label for="cvv">CVV</label>
-          <input type="password" id="cvv" required>
+          <label for="expYear">Exp. Year</label>
+          <input type="text" id="expYear" name="expYear" placeholder="YY" required>
         </div>
+      </div>
+      <div class="form-field">
+        <label for="cardCode">CVV</label>
+        <input type="password" id="cardCode" name="cardCode" required>
+      </div>
+      <div class="form-field">
+        <label for="fullName">Cardholder Name</label>
+        <input type="text" id="fullName" name="fullName" required>
       </div>
       <div class="form-field">
         <label for="email">Email</label>
-        <input type="email" id="email" required>
+        <input type="email" id="email" name="email" required>
       </div>
       <div class="form-field">
-        <label for="phone">Phone Number</label>
-        <input type="tel" id="phone" required>
+        <label for="phone">Phone</label>
+        <input type="tel" id="phone" name="phone" required>
       </div>
+      <input type="hidden" id="dataValue" name="dataValue">
+      <input type="hidden" id="dataDescriptor" name="dataDescriptor">
       <div class="button-row">
-        <button type="button" class="cancel-btn">Cancel</button>
-        <button type="submit" class="save-btn">Save changes</button>
+        <button type="button" class="cancel-btn" onclick="window.location.reload()">Cancel</button>
+        <button type="button" class="save-btn" onclick="sendPaymentDataToAnet()">Save changes</button>
       </div>
     </form>
   </div>
 
-  <script>
-    document.getElementById('payment-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const expiry = document.getElementById("expiry").value;
-      const expiryPattern = /^(0[1-9]|1[0-2])\/\d{2}$/;
-
-      if (!expiryPattern.test(expiry)) {
-        alert("Please enter the expiration date in MM/YY format.");
-        return;
-      }
-
-      const [month, shortYear] = expiry.split("/");
-      const year = "20" + shortYear;
-
+  <script type="text/javascript">
+    function sendPaymentDataToAnet() {
       const authData = {
         clientKey: "2db4sy8RBUHK3nFW7y6aSK6Ae3WC9TQ6f4vWh3ynN78yrpMjjbQ52X5vz5MA3Zf9",
         apiLoginID: "4625ksJLu"
       };
 
       const cardData = {
-        cardNumber: document.getElementById("card-number").value,
-        month: month,
-        year: year,
-        cardCode: document.getElementById("cvv").value
+        cardNumber: document.getElementById("cardNumber").value,
+        month: document.getElementById("expMonth").value,
+        year: document.getElementById("expYear").value,
+        cardCode: document.getElementById("cardCode").value
       };
 
       const secureData = {
@@ -151,28 +142,22 @@
 
       Accept.dispatchData(secureData, function(response) {
         if (response.messages.resultCode === "Error") {
-          alert("Error: " + response.messages.message[0].text);
+          let errorMsg = response.messages.message[0].text;
+          alert("Error: " + errorMsg);
         } else {
-          fetch("save-payment.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              dataDescriptor: response.opaqueData.dataDescriptor,
-              dataValue: response.opaqueData.dataValue,
-              fullName: document.getElementById("cardholder-name").value,
-              email: document.getElementById("email").value,
-              phone: document.getElementById("phone").value
-            })
-          }).then(res => res.json()).then(data => {
-            if (data.error) {
-              alert("Server Error: " + data.error);
-            } else {
-              alert("Payment information updated successfully!");
-            }
-          });
+          document.getElementById("dataDescriptor").value = response.opaqueData.dataDescriptor;
+          document.getElementById("dataValue").value = response.opaqueData.dataValue;
+
+          // Clear sensitive data fields
+          document.getElementById("cardNumber").value = "";
+          document.getElementById("expMonth").value = "";
+          document.getElementById("expYear").value = "";
+          document.getElementById("cardCode").value = "";
+
+          document.getElementById("paymentForm").submit();
         }
       });
-    });
+    }
   </script>
 </body>
 </html>
