@@ -237,27 +237,36 @@
       document.getElementById("cardCode").value = "";
 
       fetch("/update-payment/save-payment.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          dataDescriptor: opaqueData.dataDescriptor,
-          dataValue: opaqueData.dataValue,
-          fullName: document.getElementById("fullName").value,
-          email: document.getElementById("email").value,
-          phone: document.getElementById("phone").value
-        })
-      })
-        .then(res => res.json())
-        .then(data => {
-          if (data.error) {
-            alert("Server Error: " + data.error);
-          } else {
-            console.log("✅ Customer Profile ID:", data.stored?.profileId);
-            console.log("✅ Payment Profile ID:", data.stored?.paymentProfileId);
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    dataDescriptor: opaqueData.dataDescriptor,
+    dataValue: opaqueData.dataValue,
+    fullName: document.getElementById("fullName").value,
+    email: document.getElementById("email").value,
+    phone: document.getElementById("phone").value
+  })
+})
+  .then(async res => {
+    const text = await res.text(); // get raw response
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      throw new Error("Invalid JSON from server: " + text);
+    }
 
-            alert("Payment information updated successfully!");
-          }
-        });
+    if (data.error) {
+      alert("Server Error: " + data.error);
+    } else {
+      alert("Payment information updated successfully!");
+      console.log("Server response:", data);
+    }
+  })
+  .catch(err => {
+    console.error("Request failed:", err);
+    alert("Unexpected error: " + err.message);
+  });
     }
   });
 });
