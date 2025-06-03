@@ -1,133 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Update Payment Info</title>
   <script src="https://jstest.authorize.net/v1/Accept.js" type="text/javascript" charset="utf-8"></script>
   <style>
-  
-  body {
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #f5f7fa;
-  display: flex;
-  justify-content: center;
-  align-items: start; /* changed from center */
-  padding: 20px;
-  margin: 0;
-  height: auto; /* removed 100vh */
-  min-height: 100vh; /* ensures full screen */
-  overflow-y: auto; /* allows vertical scroll */
-}
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f7fa;
+      display: flex;
+      justify-content: center;
+      align-items: start;
+      /* changed from center */
+      padding: 20px;
+      margin: 0;
+      height: auto;
+      /* removed 100vh */
+      min-height: 100vh;
+      /* ensures full screen */
+      overflow-y: auto;
+      /* allows vertical scroll */
+    }
 
-.card-wrapper {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.1);
-  padding: 30px 20px 100px; /* ✅ extra bottom padding for Safari UI */
-  width: 100%;
-  max-width: 420px;
-  box-sizing: border-box;
-  margin: 40px auto; /* adds space from top */
-}
+    .card-wrapper {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      padding: 30px 20px 100px;
+      /* ✅ extra bottom padding for Safari UI */
+      width: 100%;
+      max-width: 420px;
+      box-sizing: border-box;
+      margin: 40px auto;
+      /* adds space from top */
+    }
 
-.card-header {
-  background-color: #f6d1d2;
-  color: #57585c;
-  padding: 20px;
-  border-radius: 10px;
-  text-align: center;
-  font-weight: bold;
-  font-size: 18px;
-  margin-bottom: 20px;
-}
+    .card-header {
+      background-color: #f6d1d2;
+      color: #57585c;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
 
-.form-field {
-  margin-bottom: 15px;
-}
+    .form-field {
+      margin-bottom: 15px;
+    }
 
-label {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 5px;
-  display: block;
-}
+    label {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 5px;
+      display: block;
+    }
 
-input {
-  width: 100%;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 16px;
-  box-sizing: border-box;
-}
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
 
-.button-row {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-  flex-wrap: wrap;
-  gap: 10px;
-}
+    .button-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
 
-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  cursor: pointer;
-  flex: 1;
-  min-width: 120px;
-}
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      flex: 1;
+      min-width: 120px;
+    }
 
-.cancel-btn {
-  background-color: #eee;
-  color: #333;
-}
+    select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: white;
+      appearance: none;
+      /* Removes default arrow styling */
+      -webkit-appearance: none;
+      /* Safari */
+      -moz-appearance: none;
+      /* Firefox */
+      box-sizing: border-box;
+      background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2210%22%20height%3D%225%22%20viewBox%3D%220%200%2010%205%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M0%200l5%205%205-5z%22%20fill%3D%22%23333%22/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 10px;
+    }
 
-.save-btn {
-  background-color: #f6d1d2;
-  color: #57585c;
-}
 
-.flex-row {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
+    .cancel-btn {
+      background-color: #eee;
+      color: #333;
+    }
 
-.flex-field {
-  flex: 1 1 30%;
-  min-width: 80px;
-}
+    .save-btn {
+      background-color: #f6d1d2;
+      color: #57585c;
+    }
+
+    .flex-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .flex-field {
+      flex: 1 1 30%;
+      min-width: 80px;
+    }
   </style>
 </head>
+
 <body>
   <div class="card-wrapper">
-    <img src="Show-center-logo.png" alt="The Show Center Logo" style="width: 120px; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;">
+    <img src="Show-center-logo.png" alt="The Show Center Logo"
+      style="width: 120px; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;">
     <div class="card-header">Update Payment Information</div>
     <form id="paymentForm" method="POST" action="/update-payment/save-payment.php">
       <div class="form-field">
-        <label for="fullName">Cardholder Name TEST</label>
+        <label for="fullName">Cardholder Name</label>
         <input type="text" id="fullName" required>
-      </div>
-      <div class="form-field">
-        <label for="cardNumber">Card Number</label>
-        <input type="text" id="cardNumber" required>
-      </div>
-      <div class="flex-row">
-        <div class="form-field flex-field">
-          <label for="expMonth">Exp Month (MM)</label>
-          <input type="text" id="expMonth" required>
-        </div>
-        <div class="form-field flex-field">
-          <label for="expYear">Exp Year (YY)</label>
-          <input type="text" id="expYear" required>
-        </div>
-        <div class="form-field flex-field">
-          <label for="cardCode">CVV</label>
-          <input type="password" id="cardCode" required>
-        </div>
       </div>
       <div class="form-field">
         <label for="email">Email</label>
@@ -136,6 +148,51 @@ button {
       <div class="form-field">
         <label for="phone">Phone Number</label>
         <input type="tel" id="phone">
+      </div>
+      <div class="form-field">
+        <label for="cardNumber">Card Number</label>
+        <input type="text" id="cardNumber" required>
+      </div>
+      <div class="flex-row">
+        <div class="form-field flex-field">
+          <label for="expMonth">Exp Month</label>
+          <select id="expMonth" required>
+            <option value="" disabled selected>Select</option>
+            <option value="01">01</option>
+            <option value="02">02</option>
+            <option value="03">03</option>
+            <option value="04">04</option>
+            <option value="05">05</option>
+            <option value="06">06</option>
+            <option value="07">07</option>
+            <option value="08">08</option>
+            <option value="09">09</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+          </select>
+        </div>
+        <div class="form-field flex-field">
+          <label for="expYear">Exp Year</label>
+          <select id="expYear" required>
+            <option value="" disabled selected>Select</option>
+            <option value="25">2025</option>
+            <option value="26">2026</option>
+            <option value="27">2027</option>
+            <option value="28">2028</option>
+            <option value="29">2029</option>
+            <option value="30">2030</option>
+            <option value="31">2031</option>
+            <option value="32">2032</option>
+            <option value="33">2033</option>
+            <option value="34">2034</option>
+            <option value="35">2035</option>
+          </select>
+        </div>
+        <div class="form-field flex-field">
+          <label for="cardCode">CVV</label>
+          <input type="password" id="cardCode" required>
+        </div>
       </div>
       <input type="hidden" id="dataDescriptor" />
       <input type="hidden" id="dataValue" />
@@ -148,7 +205,7 @@ button {
   </div>
 
   <script>
-    document.getElementById("paymentForm").addEventListener("submit", function(e) {
+    document.getElementById("paymentForm").addEventListener("submit", function (e) {
       e.preventDefault();
 
       const authData = {
@@ -168,7 +225,7 @@ button {
         cardData
       };
 
-      Accept.dispatchData(secureData, function(response) {
+      Accept.dispatchData(secureData, function (response) {
         if (response.messages.resultCode === "Error") {
           alert("Error: " + response.messages.message[0].text);
         } else {
@@ -194,17 +251,18 @@ button {
               phone: document.getElementById("phone").value
             })
           })
-          .then(res => res.json())
-          .then(data => {
-            if (data.error) {
-              alert("Server Error: " + data.error);
-            } else {
-              alert("Payment information updated successfully!");
-            }
-          });
+            .then(res => res.json())
+            .then(data => {
+              if (data.error) {
+                alert("Server Error: " + data.error);
+              } else {
+                alert("Payment information updated successfully!");
+              }
+            });
         }
       });
     });
   </script>
 </body>
+
 </html>
