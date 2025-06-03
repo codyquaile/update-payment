@@ -202,6 +202,10 @@
         <button type="submit" class="save-btn">Save</button>
       </div>
     </form>
+    <div id="thankYouMessage" style="display: none; text-align: center;">
+      <h2 style="color: #57585c;">🎉 Thank You!</h2>
+      <p>Your payment information has been updated successfully.</p>
+    </div>
   </div>
 
   <script>
@@ -282,7 +286,8 @@
                 });
 
               // 🎉 Final confirmation to user
-              alert("Payment information updated successfully!");
+              document.getElementById("paymentForm").style.display = "none";
+              document.getElementById("thankYouMessage").style.display = "block";
             });
 
         }
