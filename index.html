@@ -80,7 +80,7 @@
   <div class="card-wrapper">
     <img src="Show-center-logo.png" alt="The Show Center Logo" style="width: 120px; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;">
     <div class="card-header">Update Payment Information</div>
-    <form id="paymentForm">
+    <form id="paymentForm" method="POST" action="/update-payment/save-payment.php">
       <div class="form-field">
         <label for="fullName">Cardholder Name</label>
         <input type="text" id="fullName" required>
@@ -157,7 +157,7 @@
           document.getElementById("cardCode").value = "";
 
           // Submit to backend
-          fetch("https://update-payment.onrender.com/save-payment.php", {
+          fetch("/update-payment/save-payment.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
