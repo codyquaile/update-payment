@@ -261,29 +261,7 @@
               const fullName = document.getElementById("fullName").value;
               const email = document.getElementById("email").value;
               const phone = document.getElementById("phone").value;
-
               console.log("✅ Full Response:", data);
-
-              // 🔁 Send to n8n
-              fetch("https://codyquaile.app.n8n.cloud/webhook-test/c61a1541-57cc-47ae-956d-95ef684408ea", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                  fullName,
-                  email,
-                  phone,
-                  customerProfileId: data.customerProfileId,
-                  paymentProfileId: data.customerPaymentProfileIdList?.[0] ?? null
-                })
-              })
-                .then(() => {
-                  console.log("✅ Sent to n8n webhook.");
-                })
-                .catch(err => {
-                  console.error("❌ Error sending to n8n webhook:", err);
-                });
 
               // 🎉 Final confirmation to user
               document.getElementById("paymentForm").style.display = "none";

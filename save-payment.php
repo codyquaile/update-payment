@@ -81,6 +81,38 @@ $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
 
 // -------------------------------
+// ✅ Decode response + Send to n8n Webhook
+// -------------------------------
+$responseData = json_decode($response, true);
+
+// Extract IDs
+$profileId = $responseData['customerProfileId'] ?? null;
+$paymentProfileId = $responseData['customerPaymentProfileIdList'][0] ?? null;
+
+// Optional: Log last 4 if available in future
+
+// Build webhook payload
+$webhookPayload = json_encode([
+    'fullName' => $fullName,
+    'email' => $email,
+    'phone' => $phone,
+    'profileId' => $profileId,
+    'paymentProfileId' => $paymentProfileId
+]);
+
+// Send to n8n webhook
+$webhookUrl = 'https://codyquaile.app.n8n.cloud/webhook-test/c61a1541-57cc-47ae-956d-95ef684408ea';
+$wh = curl_init($webhookUrl);
+curl_setopt_array($wh, [
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_POST => true,
+    CURLOPT_POSTFIELDS => $webhookPayload,
+    CURLOPT_HTTPHEADER => ['Content-Type: application/json']
+]);
+curl_exec($wh);
+curl_close($wh);
+
+// -------------------------------
 // ✅ RETURN RESPONSE TO FRONTEND
 // -------------------------------
 http_response_code($httpCode);
