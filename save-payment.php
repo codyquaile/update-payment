@@ -77,6 +77,35 @@ curl_setopt_array($ch, [
     CURLOPT_POSTFIELDS => json_encode($payload)
 ]);
 $response = curl_exec($ch);
+$responseData = json_decode($response, true);
+
+// Handle possible variations in API structure
+$paymentProfileId = null;
+$profileId = null;
+
+// Authorize.net returns these fields at the top level
+if (isset($responseData['customerProfileId'])) {
+    $profileId = $responseData['customerProfileId'];
+}
+
+if (isset($responseData['customerPaymentProfileIdList'])) {
+    $idList = $responseData['customerPaymentProfileIdList'];
+    if (is_array($idList)) {
+        $paymentProfileId = $idList[0] ?? null;
+    } elseif (is_string($idList)) {
+        $paymentProfileId = $idList;
+    }
+}
+
+// ✅ Now send to your webhook
+$webhookPayload = json_encode([
+    'fullName' => $fullName,
+    'email' => $email,
+    'phone' => $phone,
+    'profileId' => $profileId,
+    'paymentProfileId' => $paymentProfileId
+]);
+
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 curl_close($ch);
 
