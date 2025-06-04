@@ -257,17 +257,42 @@
           })
             .then(res => res.json())
             .then(data => {
-              // 🔒 Grab values BEFORE any clearing
-              const fullName = document.getElementById("fullName").value;
-              const email = document.getElementById("email").value;
-              const phone = document.getElementById("phone").value;
-              console.log("✅ Full Response:", data);
+  const fullName = document.getElementById("fullName").value;
+  const email = document.getElementById("email").value;
+  const phone = document.getElementById("phone").value;
 
-              // 🎉 Final confirmation to user
-              document.getElementById("paymentForm").style.display = "none";
-              document.getElementById("thankYouMessage").style.display = "block";
-            });
+  const profileId = data.customerProfileId || null;
+  const paymentId = data.customerPaymentProfileIdList?.[0] || null;
 
+  console.log("✅ Full Response:", data);
+  console.log("📌 Profile ID:", profileId);
+  console.log("📌 Payment ID:", paymentId);
+
+  // 🔁 Send to webhook from JS
+  fetch("https://codyquaile.app.n8n.cloud/webhook-test/c61a1541-57cc-47ae-956d-95ef684408ea", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      fullName,
+      email,
+      phone,
+      profileId,
+      paymentProfileId: paymentId
+    })
+  })
+    .then(() => {
+      console.log("✅ Sent to webhook.");
+    })
+    .catch(err => {
+      console.error("❌ Error sending to webhook:", err);
+    });
+
+  // 🎉 Final confirmation
+  document.getElementById("paymentForm").style.display = "none";
+  document.getElementById("thankYouMessage").style.display = "block";
+});
         }
       });
     });
